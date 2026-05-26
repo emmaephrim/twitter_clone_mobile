@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/screens/login.dart';
 
 class SignUp extends StatefulWidget {
@@ -25,6 +26,7 @@ class _SignUpState extends State<SignUp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            FaIcon(FontAwesomeIcons.twitter, color: Colors.blue, size: 70),
             Text(
               "Sign up to Twitter",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
