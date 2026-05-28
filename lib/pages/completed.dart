@@ -37,7 +37,15 @@ class CompletedTodo extends ConsumerWidget {
                 ),
               ],
             ),
-            child: ListTile(title: Text(completedTodos[index].content)),
+            child: Container(
+              margin: EdgeInsets.all(8),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey[300],
+              ),
+              child: ListTile(title: Text(completedTodos[index].content)),
+            ),
           );
         },
       ),

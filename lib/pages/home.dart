@@ -11,6 +11,8 @@ class MyHomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    List<Todo> todos = ref.watch(todoListProvider);
+
     List<Todo> completedTodos = ref
         .watch(todoListProvider)
         .where((todo) => todo.completed == true)
@@ -27,56 +29,75 @@ class MyHomePage extends ConsumerWidget {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: activeTodos.length,
-              itemBuilder: (context, index) {
-                return Slidable(
-                  startActionPane: ActionPane(
-                    motion: ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (context) => ref
-                            .watch(todoListProvider.notifier)
-                            .deleteTodo(activeTodos[index]),
-                        icon: Icons.delete,
-                        backgroundColor: Colors.red,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ],
+      body: todos.isNotEmpty
+          ? Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: activeTodos.length,
+                    itemBuilder: (context, index) {
+                      return Slidable(
+                        startActionPane: ActionPane(
+                          motion: ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) => ref
+                                  .watch(todoListProvider.notifier)
+                                  .deleteTodo(activeTodos[index]),
+                              icon: Icons.delete,
+                              backgroundColor: Colors.red,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ],
+                        ),
+                        endActionPane: ActionPane(
+                          motion: ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) => ref
+                                  .watch(todoListProvider.notifier)
+                                  .completeTodo(activeTodos[index].todoId),
+                              icon: Icons.check,
+                              backgroundColor: Colors.green,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ],
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(8),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.grey[300],
+                          ),
+                          child: ListTile(
+                            title: Text(activeTodos[index].content),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  endActionPane: ActionPane(
-                    motion: ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (context) => ref
-                            .watch(todoListProvider.notifier)
-                            .completeTodo(activeTodos[index].todoId),
-                        icon: Icons.check,
-                        backgroundColor: Colors.green,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ],
-                  ),
-                  child: ListTile(title: Text(activeTodos[index].content)),
-                );
-              },
+                ),
+                completedTodos.isNotEmpty
+                    ? TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CompletedTodo(),
+                            ),
+                          );
+                        },
+                        child: Text("Completed Todo"),
+                      )
+                    : Container(),
+              ],
+            )
+          : Center(
+              child: Text(
+                "Add a todo using the button below!",
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+              ),
             ),
-          ),
-          completedTodos.isNotEmpty
-              ? TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => CompletedTodo()),
-                    );
-                  },
-                  child: Text("Completed Todo"),
-                )
-              : Container(),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(
