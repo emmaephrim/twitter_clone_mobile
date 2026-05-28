@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:twitter_clone/pages/home.dart';
+import 'package:twitter_clone/screens/login.dart';
 
 void main() {
   runApp(ProviderScope(child: const MyApp()));
@@ -12,21 +12,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),
       debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        appBarTheme: AppBarTheme(
-          centerTitle: true,
-          iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Colors.blue.shade900,
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
       ),
+
+      routes: {'/': (context) => Login()},
     );
   }
 }
