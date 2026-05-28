@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clone/providers.dart';
 import 'package:twitter_clone/screens/signup.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Login extends ConsumerWidget {
+  Login({super.key});
 
-  @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
   final GlobalKey<FormState> _signInKey = GlobalKey();
+
   final RegExp emailValid = RegExp(
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
   );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final counter = ref.watch(counterProvider);
+    CounterNotifier counterController = ref.watch(counterProvider.notifier);
+
     return Scaffold(
       body: Form(
         key: _signInKey,
@@ -27,6 +29,7 @@ class _LoginState extends State<Login> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FaIcon(FontAwesomeIcons.twitter, size: 70, color: Colors.blue),
+            SizedBox(height: 10),
             Text(
               "Log in to Twitter",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
@@ -114,6 +117,13 @@ class _LoginState extends State<Login> {
                 ).push(MaterialPageRoute(builder: (context) => SignUp()));
               },
               child: Text("Don't have an account? Sign up here"),
+            ),
+            Text("Counter: $counter"),
+            TextButton(
+              onPressed: () {
+                counterController.add();
+              },
+              child: Text("Add"),
             ),
           ],
         ),

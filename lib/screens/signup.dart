@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clone/providers.dart';
 import 'package:twitter_clone/screens/login.dart';
 
 class SignUp extends StatefulWidget {
@@ -20,6 +22,8 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    final counter;
+
     return Scaffold(
       body: Form(
         key: _signInKey,
@@ -27,6 +31,7 @@ class _SignUpState extends State<SignUp> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FaIcon(FontAwesomeIcons.twitter, color: Colors.blue, size: 70),
+            SizedBox(height: 10),
             Text(
               "Sign up to Twitter",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
@@ -112,6 +117,30 @@ class _SignUpState extends State<SignUp> {
                 Navigator.of(context).pop();
               },
               child: Text("Already have an acount? Login up here"),
+            ),
+            Consumer(
+              builder: (context, ref, child) {
+                return ref
+                    .watch(messageProvider)
+                    .when(
+                      data: (message) {
+                        return Text(message);
+                      },
+                      error: (error, stackTrace) {
+                        return Text(error.toString());
+                      },
+                      loading: () {
+                        return CircularProgressIndicator();
+                      },
+                    );
+              },
+            ),
+
+            Consumer(
+              builder: (context, ref, child) {
+                final counter = ref.watch(counterProvider);
+                return Text("Counter: $counter");
+              },
             ),
           ],
         ),
