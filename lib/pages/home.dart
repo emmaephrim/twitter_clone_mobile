@@ -20,7 +20,30 @@ class MyHomePage extends ConsumerWidget {
       body: ListView.builder(
         itemCount: todos.length,
         itemBuilder: (context, index) {
-          return ListTile(title: Text(todos[index].content));
+          return ListTile(
+            leading: IconButton(
+              onPressed: () {
+                ref
+                    .watch(todoListProvider.notifier)
+                    .completeTodo(todos[index].todoId);
+              },
+              icon: const Icon(Icons.check, color: Colors.lightBlue),
+            ),
+            title: Text(
+              todos[index].content,
+              style: TextStyle(
+                decoration: todos[index].completed
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none,
+              ),
+            ),
+            trailing: IconButton(
+              onPressed: () {
+                ref.watch(todoListProvider.notifier).deleteTodo(todos[index]);
+              },
+              icon: const Icon(Icons.delete, color: Colors.blueGrey),
+            ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
