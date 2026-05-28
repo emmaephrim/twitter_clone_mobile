@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:twitter_clone/models/todo.dart';
 import 'package:twitter_clone/pages/add.dart';
 import 'package:twitter_clone/providers/todo_provider.dart';
@@ -20,29 +21,34 @@ class MyHomePage extends ConsumerWidget {
       body: ListView.builder(
         itemCount: todos.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            leading: IconButton(
-              onPressed: () {
-                ref
-                    .watch(todoListProvider.notifier)
-                    .completeTodo(todos[index].todoId);
-              },
-              icon: const Icon(Icons.check, color: Colors.lightBlue),
+          return Slidable(
+            startActionPane: ActionPane(
+              motion: ScrollMotion(),
+              children: [
+                SlidableAction(
+                  onPressed: (context) => ref
+                      .watch(todoListProvider.notifier)
+                      .deleteTodo(todos[index]),
+                  icon: Icons.delete,
+                  backgroundColor: Colors.red,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ],
             ),
-            title: Text(
-              todos[index].content,
-              style: TextStyle(
-                decoration: todos[index].completed
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none,
-              ),
+            endActionPane: ActionPane(
+              motion: ScrollMotion(),
+              children: [
+                SlidableAction(
+                  onPressed: (context) => ref
+                      .watch(todoListProvider.notifier)
+                      .completeTodo(todos[index].todoId),
+                  icon: Icons.check,
+                  backgroundColor: Colors.green,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ],
             ),
-            trailing: IconButton(
-              onPressed: () {
-                ref.watch(todoListProvider.notifier).deleteTodo(todos[index]);
-              },
-              icon: const Icon(Icons.delete, color: Colors.blueGrey),
-            ),
+            child: ListTile(title: Text(todos[index].content)),
           );
         },
       ),
