@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +7,8 @@ import 'package:twitter_clone/pages/signup.dart';
 
 class Login extends ConsumerWidget {
   Login({super.key});
+
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   final TextEditingController _emailController = TextEditingController();
 
@@ -91,7 +94,7 @@ class Login extends ConsumerWidget {
               ),
             ),
             Container(
-              width: 150,
+              width: 190,
               decoration: BoxDecoration(
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(30),
@@ -117,13 +120,6 @@ class Login extends ConsumerWidget {
                 ).push(MaterialPageRoute(builder: (context) => SignUp()));
               },
               child: Text("Don't have an account? Sign up here"),
-            ),
-            Text("Counter: $counter"),
-            TextButton(
-              onPressed: () {
-                counterController.add();
-              },
-              child: Text("Add"),
             ),
           ],
         ),

@@ -22,8 +22,6 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    final counter;
-
     return Scaffold(
       body: Form(
         key: _signInKey,
@@ -93,7 +91,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             Container(
-              width: 150,
+              width: 190,
               decoration: BoxDecoration(
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(30),
@@ -117,30 +115,6 @@ class _SignUpState extends State<SignUp> {
                 Navigator.of(context).pop();
               },
               child: Text("Already have an acount? Login up here"),
-            ),
-            Consumer(
-              builder: (context, ref, child) {
-                return ref
-                    .watch(messageProvider)
-                    .when(
-                      data: (message) {
-                        return Text(message);
-                      },
-                      error: (error, stackTrace) {
-                        return Text(error.toString());
-                      },
-                      loading: () {
-                        return CircularProgressIndicator();
-                      },
-                    );
-              },
-            ),
-
-            Consumer(
-              builder: (context, ref, child) {
-                final counter = ref.watch(counterProvider);
-                return Text("Counter: $counter");
-              },
             ),
           ],
         ),

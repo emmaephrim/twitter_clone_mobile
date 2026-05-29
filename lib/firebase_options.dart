@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'official-twitter-clone-2026.firebaseapp.com',
     storageBucket: 'official-twitter-clone-2026.firebasestorage.app',
   );
+
 }
