@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/pages/signup.dart';
 
 class Login extends StatefulWidget {
-  Login({super.key});
+  const Login({super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -113,6 +113,9 @@ class _LoginState extends State<Login> {
                         email: _emailController.text,
                         password: _passwordController.text,
                       );
+                      // if (mounted) {
+                      // Navigator.of(context).pushReplacementNamed('/');
+                      // }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
