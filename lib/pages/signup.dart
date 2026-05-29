@@ -1,7 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:twitter_clone/providers.dart';
 import 'package:twitter_clone/pages/login.dart';
 
 class SignUp extends StatefulWidget {
@@ -12,6 +11,8 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -28,7 +29,13 @@ class _SignUpState extends State<SignUp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(FontAwesomeIcons.twitter, color: Colors.blue, size: 70),
+            Flexible(
+              child: FaIcon(
+                FontAwesomeIcons.twitter,
+                color: Colors.blue,
+                size: 70,
+              ),
+            ),
             SizedBox(height: 10),
             Text(
               "Sign up to Twitter",
@@ -97,10 +104,21 @@ class _SignUpState extends State<SignUp> {
                 borderRadius: BorderRadius.circular(30),
               ),
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_signInKey.currentState!.validate()) {
-                    debugPrint("Email: ${_emailController.text}");
-                    debugPrint("Password: ${_passwordController.text}");
+                    try {
+                      await _auth.createUserWithEmailAndPassword(
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.blue[900],
+                          content: Text(e.toString()),
+                        ),
+                      );
+                    }
                   }
                 },
                 child: Text(
@@ -112,7 +130,9 @@ class _SignUpState extends State<SignUp> {
             TextButton(
               style: ButtonStyle(overlayColor: WidgetStateColor.transparent),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (context) => Login()));
               },
               child: Text("Already have an acount? Login up here"),
             ),

@@ -1,14 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:twitter_clone/providers.dart';
 import 'package:twitter_clone/pages/signup.dart';
 
-class Login extends ConsumerWidget {
+class Login extends StatefulWidget {
   Login({super.key});
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final TextEditingController _emailController = TextEditingController();
 
@@ -21,17 +24,20 @@ class Login extends ConsumerWidget {
   );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final counter = ref.watch(counterProvider);
-    CounterNotifier counterController = ref.watch(counterProvider.notifier);
-
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
         key: _signInKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(FontAwesomeIcons.twitter, size: 70, color: Colors.blue),
+            Flexible(
+              child: FaIcon(
+                FontAwesomeIcons.twitter,
+                size: 70,
+                color: Colors.blue,
+              ),
+            ),
             SizedBox(height: 10),
             Text(
               "Log in to Twitter",
@@ -100,10 +106,21 @@ class Login extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(30),
               ),
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_signInKey.currentState!.validate()) {
-                    debugPrint("Email: ${_emailController.text}");
-                    debugPrint("Password: ${_passwordController.text}");
+                    try {
+                      await _auth.signInWithEmailAndPassword(
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.blue[900],
+                          content: Text(e.toString()),
+                        ),
+                      );
+                    }
                   }
                 },
                 child: Text(

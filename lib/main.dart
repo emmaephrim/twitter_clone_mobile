@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/pages/home.dart';
 import 'package:twitter_clone/pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:twitter_clone/pages/signup.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -10,9 +13,14 @@ void main() async {
   runApp(ProviderScope(child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,9 +28,27 @@ class MyApp extends StatelessWidget {
       title: 'Twitter',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        appBarTheme: AppBarTheme(
+          centerTitle: true,
+          iconTheme: IconThemeData(color: Colors.white),
+          backgroundColor: Colors.blue.shade900,
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
       ),
-
-      routes: {'/': (context) => Login()},
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const HomePage();
+          }
+          return const SignUp();
+        },
+      ),
+      // routes: {'/': (context) => Login()},
     );
   }
 }
