@@ -2,27 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/providers.dart';
-import 'package:twitter_clone/screens/login.dart';
+import 'package:twitter_clone/pages/signup.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+class Login extends ConsumerWidget {
+  Login({super.key});
 
-  @override
-  State<SignUp> createState() => _SignUpState();
-}
-
-class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
   final GlobalKey<FormState> _signInKey = GlobalKey();
+
   final RegExp emailValid = RegExp(
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
   );
 
   @override
-  Widget build(BuildContext context) {
-    final counter;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final counter = ref.watch(counterProvider);
+    CounterNotifier counterController = ref.watch(counterProvider.notifier);
 
     return Scaffold(
       body: Form(
@@ -30,10 +28,10 @@ class _SignUpState extends State<SignUp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(FontAwesomeIcons.twitter, color: Colors.blue, size: 70),
+            FaIcon(FontAwesomeIcons.twitter, size: 70, color: Colors.blue),
             SizedBox(height: 10),
             Text(
-              "Sign up to Twitter",
+              "Log in to Twitter",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
             ),
             Container(
@@ -106,7 +104,7 @@ class _SignUpState extends State<SignUp> {
                   }
                 },
                 child: Text(
-                  "Sign Up",
+                  "Log In",
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ),
@@ -114,33 +112,18 @@ class _SignUpState extends State<SignUp> {
             TextButton(
               style: ButtonStyle(overlayColor: WidgetStateColor.transparent),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (context) => SignUp()));
               },
-              child: Text("Already have an acount? Login up here"),
+              child: Text("Don't have an account? Sign up here"),
             ),
-            Consumer(
-              builder: (context, ref, child) {
-                return ref
-                    .watch(messageProvider)
-                    .when(
-                      data: (message) {
-                        return Text(message);
-                      },
-                      error: (error, stackTrace) {
-                        return Text(error.toString());
-                      },
-                      loading: () {
-                        return CircularProgressIndicator();
-                      },
-                    );
+            Text("Counter: $counter"),
+            TextButton(
+              onPressed: () {
+                counterController.add();
               },
-            ),
-
-            Consumer(
-              builder: (context, ref, child) {
-                final counter = ref.watch(counterProvider);
-                return Text("Counter: $counter");
-              },
+              child: Text("Add"),
             ),
           ],
         ),

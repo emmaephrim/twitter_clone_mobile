@@ -2,25 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/providers.dart';
-import 'package:twitter_clone/screens/signup.dart';
+import 'package:twitter_clone/pages/login.dart';
 
-class Login extends ConsumerWidget {
-  Login({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
-
   final TextEditingController _passwordController = TextEditingController();
 
   final GlobalKey<FormState> _signInKey = GlobalKey();
-
   final RegExp emailValid = RegExp(
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
   );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final counter = ref.watch(counterProvider);
-    CounterNotifier counterController = ref.watch(counterProvider.notifier);
+  Widget build(BuildContext context) {
+    final counter;
 
     return Scaffold(
       body: Form(
@@ -28,10 +30,10 @@ class Login extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(FontAwesomeIcons.twitter, size: 70, color: Colors.blue),
+            FaIcon(FontAwesomeIcons.twitter, color: Colors.blue, size: 70),
             SizedBox(height: 10),
             Text(
-              "Log in to Twitter",
+              "Sign up to Twitter",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
             ),
             Container(
@@ -104,7 +106,7 @@ class Login extends ConsumerWidget {
                   }
                 },
                 child: Text(
-                  "Log In",
+                  "Sign Up",
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ),
@@ -112,18 +114,33 @@ class Login extends ConsumerWidget {
             TextButton(
               style: ButtonStyle(overlayColor: WidgetStateColor.transparent),
               onPressed: () {
-                Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (context) => SignUp()));
+                Navigator.of(context).pop();
               },
-              child: Text("Don't have an account? Sign up here"),
+              child: Text("Already have an acount? Login up here"),
             ),
-            Text("Counter: $counter"),
-            TextButton(
-              onPressed: () {
-                counterController.add();
+            Consumer(
+              builder: (context, ref, child) {
+                return ref
+                    .watch(messageProvider)
+                    .when(
+                      data: (message) {
+                        return Text(message);
+                      },
+                      error: (error, stackTrace) {
+                        return Text(error.toString());
+                      },
+                      loading: () {
+                        return CircularProgressIndicator();
+                      },
+                    );
               },
-              child: Text("Add"),
+            ),
+
+            Consumer(
+              builder: (context, ref, child) {
+                final counter = ref.watch(counterProvider);
+                return Text("Counter: $counter");
+              },
             ),
           ],
         ),
