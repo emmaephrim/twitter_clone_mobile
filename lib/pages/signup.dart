@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/models/user.dart';
 import 'package:twitter_clone/pages/login.dart';
+import 'package:twitter_clone/providers/user_provider.dart';
 
-class SignUp extends StatefulWidget {
+class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  ConsumerState<SignUp> createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpState extends ConsumerState<SignUp> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
@@ -114,11 +116,9 @@ class _SignUpState extends State<SignUp> {
                         email: _emailController.text,
                         password: _passwordController.text,
                       );
-                      await _firebaseFirestore
-                          .collection("users")
-                          .add(
-                            FirebaseUser(email: _emailController.text).toMap(),
-                          );
+                      await ref
+                          .watch(userProvider.notifier)
+                          .signUp(_emailController.text);
                       if (!mounted) return;
                       Navigator.pop(context);
                     } catch (e) {

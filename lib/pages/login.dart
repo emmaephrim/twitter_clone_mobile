@@ -1,16 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/pages/signup.dart';
+import 'package:twitter_clone/providers/user_provider.dart';
 
-class Login extends StatefulWidget {
+class Login extends ConsumerStatefulWidget {
   const Login({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  ConsumerState<Login> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends ConsumerState<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final TextEditingController _emailController = TextEditingController();
@@ -113,9 +115,12 @@ class _LoginState extends State<Login> {
                         email: _emailController.text,
                         password: _passwordController.text,
                       );
-                      if (mounted) {
-                        return Navigator.pop(context);
-                      }
+                      await ref
+                          .watch(userProvider.notifier)
+                          .login(_emailController.text);
+                      // if (mounted) {
+                      //   return Navigator.pop(context);
+                      // }
                       // if (mounted) {
                       //   Navigator.of(context).pushReplacementNamed('/');
                       // }

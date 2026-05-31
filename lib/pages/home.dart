@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/providers/user_provider.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -14,8 +15,20 @@ class HomePage extends ConsumerWidget {
           TextButton(
             onPressed: () {
               FirebaseAuth.instance.signOut();
+              ref.watch(userProvider.notifier).logout();
             },
             child: Text("Sign Out", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Text(ref.watch(userProvider).user.email),
+          Text(ref.watch(userProvider).user.name),
+          CircleAvatar(
+            backgroundImage: NetworkImage(
+              ref.watch(userProvider).user.profilePic,
+            ),
           ),
         ],
       ),
