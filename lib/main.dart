@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/pages/home.dart';
 import 'package:twitter_clone/pages/login.dart';
+import 'package:twitter_clone/pages/settings.dart';
+import 'package:twitter_clone/pages/signup.dart';
 import 'package:twitter_clone/providers/user_provider.dart';
 
 import 'firebase_options.dart';
@@ -57,6 +59,9 @@ class MyApp extends ConsumerWidget {
             },
           );
         },
+        '/login': (context) => const Login(),
+        '/signup': (context) => const SignUp(),
+        '/settings': (context) => const SettingsPage(),
       },
     );
   }
