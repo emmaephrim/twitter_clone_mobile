@@ -113,8 +113,11 @@ class _LoginState extends State<Login> {
                         email: _emailController.text,
                         password: _passwordController.text,
                       );
+                      if (mounted) {
+                        return Navigator.pop(context);
+                      }
                       // if (mounted) {
-                      // Navigator.of(context).pushReplacementNamed('/');
+                      //   Navigator.of(context).pushReplacementNamed('/');
                       // }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(

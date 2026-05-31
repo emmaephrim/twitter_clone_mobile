@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clone/models/user.dart';
 import 'package:twitter_clone/pages/login.dart';
 
 class SignUp extends StatefulWidget {
@@ -12,6 +14,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -111,6 +114,13 @@ class _SignUpState extends State<SignUp> {
                         email: _emailController.text,
                         password: _passwordController.text,
                       );
+                      await _firebaseFirestore
+                          .collection("users")
+                          .add(
+                            FirebaseUser(email: _emailController.text).toMap(),
+                          );
+                      if (!mounted) return;
+                      Navigator.pop(context);
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -134,7 +144,7 @@ class _SignUpState extends State<SignUp> {
                   context,
                 ).push(MaterialPageRoute(builder: (context) => Login()));
               },
-              child: Text("Already have an acount? Login up here"),
+              child: Text("Already have an acount? Login here"),
             ),
           ],
         ),
