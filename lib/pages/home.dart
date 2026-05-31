@@ -66,6 +66,12 @@ class HomePage extends ConsumerWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed("/createTweet");
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

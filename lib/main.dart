@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/pages/create_tweet.dart';
 import 'package:twitter_clone/pages/home.dart';
 import 'package:twitter_clone/pages/login.dart';
 import 'package:twitter_clone/pages/settings.dart';
@@ -62,6 +63,7 @@ class MyApp extends ConsumerWidget {
         '/login': (context) => const Login(),
         '/signup': (context) => const SignUp(),
         '/settings': (context) => const SettingsPage(),
+        '/createTweet': (context) => const CreateTweet(),
       },
     );
   }
