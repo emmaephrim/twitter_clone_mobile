@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:twitter_clone/providers/user_provider.dart';
 
 class SettingsPage extends ConsumerWidget {
@@ -17,6 +20,27 @@ class SettingsPage extends ConsumerWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            GestureDetector(
+              onTap: () async {
+                final picker = ImagePicker();
+                // Pick an image.
+                final XFile? pickedImage = await picker.pickImage(
+                  source: ImageSource.gallery,
+                  requestFullMetadata: false,
+                );
+                if (pickedImage != null) {
+                  ref
+                      .read(userProvider.notifier)
+                      .updateProfilePic(File(pickedImage.path));
+                }
+              },
+              child: CircleAvatar(
+                radius: 80,
+                foregroundImage: NetworkImage(currentUser.user.profilePic),
+              ),
+            ),
+            Center(child: Text("Tap on the image to update it.")),
+            SizedBox(height: 20),
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
