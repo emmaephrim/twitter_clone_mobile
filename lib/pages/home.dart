@@ -1,20 +1,33 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/models/tweet.dart';
 import 'package:twitter_clone/providers/tweet_provider.dart';
 import 'package:twitter_clone/providers/user_provider.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  @override
+  Widget build(BuildContext context) {
     LocalUser currentUser = ref.watch(userProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        shadowColor: Colors.transparent,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0),
+          child: Container(color: Colors.grey, height: 1),
+        ),
+        backgroundColor: Colors.transparent,
+        toolbarHeight: 60,
+        title: FaIcon(FontAwesomeIcons.twitter, size: 45, color: Colors.blue),
         leading: Builder(
           builder: (context) {
             return GestureDetector(
@@ -34,7 +47,9 @@ class HomePage extends ConsumerWidget {
           .watch(feedProvider)
           .when(
             data: (List<Tweet> tweets) {
-              return ListView.builder(
+              return ListView.separated(
+                separatorBuilder: (context, index) =>
+                    Divider(color: Colors.grey.shade500),
                 itemCount: tweets.length,
                 itemBuilder: (context, index) {
                   return ListTile(
@@ -61,7 +76,14 @@ class HomePage extends ConsumerWidget {
       drawer: Drawer(
         child: Column(
           children: [
-            Image.network(currentUser.user.profilePic),
+            SizedBox(
+              width: double.infinity,
+              height: 250,
+              child: Image.network(
+                currentUser.user.profilePic,
+                fit: BoxFit.fitWidth,
+              ),
+            ),
             ListTile(
               title: Text(
                 "Hello, ${currentUser.user.name}",

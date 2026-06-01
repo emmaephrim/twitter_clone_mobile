@@ -26,11 +26,13 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'Twitter',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade400),
         appBarTheme: AppBarTheme(
+          elevation: 2,
+          shadowColor: Colors.black.withOpacity(0.5),
           centerTitle: true,
           iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Colors.blue.shade900,
+          backgroundColor: Colors.blue.shade400,
           titleTextStyle: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

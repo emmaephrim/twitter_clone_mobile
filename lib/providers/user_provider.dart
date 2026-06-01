@@ -90,7 +90,7 @@ class UserNotifier extends StateNotifier<LocalUser> {
     String pictureUrl = await snapshot.ref.getDownloadURL();
 
     await _firestore.collection("users").doc(state.id).update({
-      "profilPic": pictureUrl,
+      "profilePic": pictureUrl,
     });
     state = state.copyWith(user: state.user.copyWith(profilePic: pictureUrl));
   }
