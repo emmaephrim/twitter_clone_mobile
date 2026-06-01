@@ -24,6 +24,7 @@ class TweeterApi {
             profilePic: currentUser.user.profilePic,
             name: currentUser.user.name,
             tweet: tweet,
+            postTime: Timestamp.now(),
           ).toMap(),
         );
   }

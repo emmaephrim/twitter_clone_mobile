@@ -1,17 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Tweet {
   final String uid;
   final String profilePic;
   final String name;
   final String tweet;
+  final Timestamp postTime;
 
   Tweet({
     required this.uid,
     required this.profilePic,
     required this.name,
     required this.tweet,
+    required this.postTime,
   });
 
   Tweet copyWith({
@@ -19,12 +23,14 @@ class Tweet {
     String? profilePic,
     String? name,
     String? tweet,
+    Timestamp? postTime,
   }) {
     return Tweet(
       uid: uid ?? this.uid,
       profilePic: profilePic ?? this.profilePic,
       name: name ?? this.name,
       tweet: tweet ?? this.tweet,
+      postTime: postTime ?? this.postTime,
     );
   }
 
@@ -34,6 +40,7 @@ class Tweet {
       'profilePic': profilePic,
       'name': name,
       'tweet': tweet,
+      'postTime': postTime,
     };
   }
 
@@ -43,6 +50,7 @@ class Tweet {
       profilePic: map['profilePic'] as String,
       name: map['name'] as String,
       tweet: map['tweet'] as String,
+      postTime: map['postTime'] as Timestamp,
     );
   }
 
@@ -53,7 +61,7 @@ class Tweet {
 
   @override
   String toString() {
-    return 'Tweet(uid: $uid, profilePic: $profilePic, name: $name, tweet: $tweet)';
+    return 'Tweet(uid: $uid, profilePic: $profilePic, name: $name, tweet: $tweet, postTime: $postTime)';
   }
 
   @override
@@ -63,11 +71,16 @@ class Tweet {
     return other.uid == uid &&
         other.profilePic == profilePic &&
         other.name == name &&
-        other.tweet == tweet;
+        other.tweet == tweet &&
+        other.postTime == postTime;
   }
 
   @override
   int get hashCode {
-    return uid.hashCode ^ profilePic.hashCode ^ name.hashCode ^ tweet.hashCode;
+    return uid.hashCode ^
+        profilePic.hashCode ^
+        name.hashCode ^
+        tweet.hashCode ^
+        postTime.hashCode;
   }
 }
